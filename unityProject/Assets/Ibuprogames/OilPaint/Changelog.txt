@@ -1,0 +1,32 @@
+2.1
+--------------------------
+- VR support (see online documentation).
+- About window.
+
+2.0
+--------------------------
+- Complete refactoring (see online documentation).
+- New modes: Layer, Dual layer and Distance.
+- Mobile optimizations.
+- WebGL support.
+- Color controls.
+
+1.3
+--------------------------
+- New 'Custom' mode.
+- Improved controls.
+- Some optimizations.
+
+1.2
+--------------------------
+- Color space linear supported.
+- New videos. 
+
+1.1
+--------------------------
+- Updated to Unity 5.
+- Offline documentation.
+
+1.0
+--------------------------
+- Initial release.

@@ -60,12 +60,29 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\DestroyInTime.cs" />
+    <Compile Include="Assets\FastProjectiles\scripts\ProjectileMover.cs" />
+    <Compile Include="Assets\FastProjectiles\scripts\ShootProjectile.cs" />
+    <Compile Include="Assets\GameManager.cs" />
+    <Compile Include="Assets\Ibuprogames\OilPaint\Demo\Scripts\OilPaintDemo.cs" />
+    <Compile Include="Assets\Ibuprogames\OilPaint\Scripts\OilPaint.cs" />
+    <Compile Include="Assets\Ibuprogames\OilPaint\Scripts\OilPaintIntensities.cs" />
+    <Compile Include="Assets\Ibuprogames\OilPaint\Scripts\OilPaintModes.cs" />
+    <Compile Include="Assets\Ibuprogames\OilPaint\Scripts\RenderDepth.cs" />
     <Compile Include="Assets\Scripts\BulletController.cs" />
+    <Compile Include="Assets\Scripts\DestroyInTime.cs" />
     <Compile Include="Assets\Scripts\EnemyController.cs" />
     <Compile Include="Assets\Scripts\HealthController.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\WeaponController.cs" />
+    <None Include="Assets\Ibuprogames\OilPaint\Resources\Shaders\OilPaintNormalCG.cginc" />
+    <None Include="Assets\Ibuprogames\OilPaint\Changelog.txt" />
+    <None Include="Assets\Ibuprogames\OilPaint\Resources\Shaders\OilPaint.shader" />
+    <None Include="Assets\Ibuprogames\OilPaint\Demo\Readme.txt" />
+    <None Include="Assets\Ibuprogames\OilPaint\Resources\Shaders\OilPaintCustomCG.cginc" />
+    <None Include="Assets\Ibuprogames\OilPaint\Resources\Shaders\RenderDepth.shader" />
+    <None Include="Assets\Ibuprogames\OilPaint\Resources\Shaders\OilPaintCG.cginc" />
+    <None Include="Assets\Ibuprogames\OilPaint\Resources\Shaders\OilPaintHighCG.cginc" />
+    <None Include="Assets\Ibuprogames\OilPaint\Resources\Shaders\OilPaintLowCG.cginc" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>C:/@daneelgames/fpsHorror/unityProject/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>

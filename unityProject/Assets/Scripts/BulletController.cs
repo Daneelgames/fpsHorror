@@ -4,40 +4,62 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
-    public float speed = 5;
     public GameObject explosion;
-    public Rigidbody rb;
-    Vector3 previousPosition;
+    public float movespeed = 5;
+    public float distanceToTravel;
 
-    private void Start()
+    public ParticleSystem particles;
+    ParticleSystem.EmissionModule particleEmission;
+
+    [HideInInspector]
+    public Vector3 currentTarget;
+    [HideInInspector]
+    public LayerMask layerMask;
+
+    float originalSpeed = 5;
+    Ray ray;
+    RaycastHit hit;
+    bool dead = false;
+
+    private void Awake()
     {
-        previousPosition = transform.position;
+        particleEmission = particles.emission;
+        originalSpeed = movespeed;
     }
 
-    private void FixedUpdate()
+    /*
+    void UpdateDistance()
     {
-        previousPosition = transform.position;
-
-        rb.transform.Translate(Vector3.forward * speed * Time.deltaTime, Space.Self);
-
-        //RaycastHit[] hits = Physics.RaycastAll(new Ray(previousPosition, (transform.position - previousPosition).normalized), (transform.position - previousPosition).magnitude);
-        Ray newRay = new Ray(previousPosition, (transform.position - previousPosition).normalized);
-        RaycastHit hit = Physics.SphereCast(newRay, 0.25f);
-        
-
-        for(int i = hits.Length - 1; i >= 0; i --)
+        ray = new Ray(transform.position, transform.TransformVector(Vector3.forward));
+        if (Physics.Raycast(ray, out hit, 1000, layerMask))
         {
-            if (hits[i].collider.gameObject.layer == 11 || hits[i].collider.gameObject.layer == 12)
+            if (Vector3.Distance(currentTarget,hit.point) > 0.5f)
+            {
+                distanceToTravel = Vector3.Distance(transform.position, hit.point);
+                float newBulletSpeed = originalSpeed;
+                movespeed = distanceToTravel / newBulletSpeed;
+                currentTarget = hit.point;
+            }
+        }
+    }
+    */
+
+    void FixedUpdate()
+    {
+        if (distanceToTravel <= 0.01f) // have we arrived our target?
+        {
+            if (!dead)
             {
                 Instantiate(explosion, transform.position, Quaternion.identity);
-                Destroy(gameObject);
+                Destroy(gameObject,1);
+                dead = true;
+                particleEmission.enabled = false;
             }
-            if (hits[i].collider.gameObject.layer == 9 || hits[i].collider.gameObject.layer == 10)
-            {
-                hits[i].collider.gameObject.GetComponent<HealthController>().Damage(hits[i].point);
-                Instantiate(explosion, transform.position, Quaternion.identity);
-                Destroy(gameObject);
-            }
+        }
+        else
+        {
+            transform.Translate(Vector3.forward * movespeed);
+            distanceToTravel -= movespeed;
         }
     }
 }

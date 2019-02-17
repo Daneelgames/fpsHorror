@@ -35,6 +35,8 @@ public class PlayerController : MonoBehaviour
             Move();
         }
 
+        transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+
         if (Input.GetKeyDown("r"))
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
@@ -56,10 +58,10 @@ public class PlayerController : MonoBehaviour
 
     void Shooting()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetButtonDown("Fire1"))
             weaponLeft.Shoot();
 
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetButtonDown("Fire2"))
             weaponRight.Shoot();
     }
 }

@@ -9,6 +9,23 @@ public class HealthController : MonoBehaviour
     public Rigidbody rb;
     public NavMeshAgent navMeshAgent;
 
+    [HideInInspector]
+    public EnemyController enemy;
+
+    private void Start()
+    {
+        GameManager.instance.AddHealthController(this);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == 11)
+        {
+            Damage(other.gameObject.transform.position);
+            other.enabled = false;
+        }
+    }
+
     public void Damage(Vector3 explosionPosition)
     {
         if (health > 0)
@@ -18,6 +35,8 @@ public class HealthController : MonoBehaviour
                 navMeshAgent.enabled = false;
             if (rb)
                 rb.constraints = RigidbodyConstraints.None;
+
+            enemy.CancelInvoke();
         }
         if (rb)
             rb.AddExplosionForce(500, explosionPosition, 1);
