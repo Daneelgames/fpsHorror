@@ -76,6 +76,7 @@
     <Compile Include="Assets\Scripts\WeaponController.cs" />
     <None Include="Assets\Ibuprogames\OilPaint\Resources\Shaders\OilPaintNormalCG.cginc" />
     <None Include="Assets\Ibuprogames\OilPaint\Changelog.txt" />
+    <None Include="Assets\Materials\AlwaysVisible.shader" />
     <None Include="Assets\Ibuprogames\OilPaint\Resources\Shaders\OilPaint.shader" />
     <None Include="Assets\Ibuprogames\OilPaint\Demo\Readme.txt" />
     <None Include="Assets\Ibuprogames\OilPaint\Resources\Shaders\OilPaintCustomCG.cginc" />

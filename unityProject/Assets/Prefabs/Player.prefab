@@ -1,87 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &142190949
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 142190950}
-  - component: {fileID: 142190952}
-  - component: {fileID: 142190951}
-  m_Layer: 0
-  m_Name: EnemyCamera
-  m_TagString: MainCamera
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &142190950
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 142190949}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4634466338923242518}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!20 &142190952
-Camera:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 142190949}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_ClearFlags: 3
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
-  m_projectionMatrixMode: 1
-  m_SensorSize: {x: 36, y: 24}
-  m_LensShift: {x: 0, y: 0}
-  m_GateFitMode: 2
-  m_FocalLength: 50
-  m_NormalizedViewPortRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 60
-  orthographic: 0
-  orthographic size: 5
-  m_Depth: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 512
-  m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
-  m_TargetEye: 3
-  m_HDR: 1
-  m_AllowMSAA: 1
-  m_AllowDynamicResolution: 0
-  m_ForceIntoRT: 0
-  m_OcclusionCulling: 1
-  m_StereoConvergence: 10
-  m_StereoSeparation: 0.022
---- !u!81 &142190951
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 142190949}
-  m_Enabled: 0
 --- !u!1 &1207169947148678371
 GameObject:
   m_ObjectHideFlags: 0
@@ -171,7 +89,7 @@ GameObject:
   - component: {fileID: 4634466338923242519}
   - component: {fileID: 4634466338923242504}
   - component: {fileID: 2685839230136235553}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -189,7 +107,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 2.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 142190950}
   - {fileID: 4634466339416230487}
   - {fileID: 7168653318845797132}
   m_Father: {fileID: 6949114828874014438}
@@ -260,7 +177,7 @@ MonoBehaviour:
   strength: 1
   customIntensity: 4
   customIntensityDual: 4
-  intensity: 0
+  intensity: 2
   mode: 0
   layer:
     serializedVersion: 2
@@ -309,7 +226,7 @@ GameObject:
   - component: {fileID: 9066547660939691360}
   - component: {fileID: 2197254997273401939}
   - component: {fileID: 788103132744147698}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -365,6 +282,7 @@ MonoBehaviour:
   health: 1
   rb: {fileID: 0}
   navMeshAgent: {fileID: 0}
+  enemy: {fileID: 0}
 --- !u!143 &788103132744147698
 CharacterController:
   m_ObjectHideFlags: 0
@@ -394,6 +312,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Revolver
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746998196463960322, guid: 8dba88c4c665bc24a858361e9295f6d4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5746998196463960349, guid: 8dba88c4c665bc24a858361e9295f6d4,
         type: 3}
@@ -433,7 +356,7 @@ PrefabInstance:
     - target: {fileID: 5746998196463960349, guid: 8dba88c4c665bc24a858361e9295f6d4,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5746998196463960349, guid: 8dba88c4c665bc24a858361e9295f6d4,
         type: 3}
@@ -449,6 +372,34 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 950229985626890301, guid: 8dba88c4c665bc24a858361e9295f6d4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2091959313, guid: 8dba88c4c665bc24a858361e9295f6d4, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2091959313, guid: 8dba88c4c665bc24a858361e9295f6d4, type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4071310257105305684, guid: 8dba88c4c665bc24a858361e9295f6d4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746998196269663047, guid: 8dba88c4c665bc24a858361e9295f6d4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5905981174256549754, guid: 8dba88c4c665bc24a858361e9295f6d4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8dba88c4c665bc24a858361e9295f6d4, type: 3}
@@ -481,6 +432,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Revolver (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746998196463960322, guid: 8dba88c4c665bc24a858361e9295f6d4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5746998196463960349, guid: 8dba88c4c665bc24a858361e9295f6d4,
         type: 3}
@@ -520,7 +476,7 @@ PrefabInstance:
     - target: {fileID: 5746998196463960349, guid: 8dba88c4c665bc24a858361e9295f6d4,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5746998196463960349, guid: 8dba88c4c665bc24a858361e9295f6d4,
         type: 3}
@@ -536,6 +492,34 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 950229985626890301, guid: 8dba88c4c665bc24a858361e9295f6d4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2091959313, guid: 8dba88c4c665bc24a858361e9295f6d4, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2091959313, guid: 8dba88c4c665bc24a858361e9295f6d4, type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4071310257105305684, guid: 8dba88c4c665bc24a858361e9295f6d4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5746998196269663047, guid: 8dba88c4c665bc24a858361e9295f6d4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5905981174256549754, guid: 8dba88c4c665bc24a858361e9295f6d4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8dba88c4c665bc24a858361e9295f6d4, type: 3}
