@@ -5,10 +5,14 @@ using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
+    public enum Behavior {Wait, Patrol, Wander, Chase};
+    public Behavior behavior = Behavior.Wait;
     public HealthController healthController;
     public NavMeshAgent agent;
 
     public List<Transform> wps = new List<Transform>();
+
+    ActionAreaController actionAreaController;
 
     private void Start()
     {
@@ -18,13 +22,20 @@ public class EnemyController : MonoBehaviour
 
     void Move1()
     {
-        agent.SetDestination(wps[0].position);
+        Vector2 newPos = new Vector2(Random.Range(-18f, 18), Random.Range(-9f, 9f));
+        agent.SetDestination(newPos);
         Invoke("Move2", 0.5f);
     }
 
     void Move2()
     {
-        agent.SetDestination(wps[1].position);
+        Vector2 newPos = new Vector2(Random.Range(-18f, 18), Random.Range(-9f, 9f));
+        agent.SetDestination(newPos);
         Invoke("Move1", 0.5f);
+    }
+
+    public void SetActionAreaController(ActionAreaController area)
+    {
+        actionAreaController = area;
     }
 }

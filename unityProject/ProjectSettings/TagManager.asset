@@ -18,8 +18,8 @@ TagManager:
   - Player
   - BulletExplosion
   - Solid
-  - 
-  - 
+  - Interactable
+  - TrownWeapon
   - 
   - 
   - 

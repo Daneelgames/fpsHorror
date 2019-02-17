@@ -21,8 +21,8 @@ public class HealthController : MonoBehaviour
     {
         if (other.gameObject.layer == 11)
         {
-            Damage(other.gameObject.transform.position);
             other.enabled = false;
+            Damage(other.gameObject.transform.position);
         }
     }
 
@@ -36,7 +36,8 @@ public class HealthController : MonoBehaviour
             if (rb)
                 rb.constraints = RigidbodyConstraints.None;
 
-            enemy.CancelInvoke();
+            if (enemy)
+                enemy.CancelInvoke();
         }
         if (rb)
             rb.AddExplosionForce(500, explosionPosition, 1);
