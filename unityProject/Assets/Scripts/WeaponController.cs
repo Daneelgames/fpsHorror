@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
+    public bool range = true;
+
     public float delay = 0.3f;
     float currentDelay = 0;
     public GameObject bulletPrefab;
@@ -11,6 +13,8 @@ public class WeaponController : MonoBehaviour
     public LayerMask layerMask;
     public Rigidbody rb;
     public Collider col;
+
+    public bool pickedUp = false;
 
     GameManager gm;
 
@@ -49,9 +53,10 @@ public class WeaponController : MonoBehaviour
         rb.isKinematic = true;
         rb.useGravity = false;
         col.isTrigger = true;
+        pickedUp = true;
     }
 
-    public void Trow()
+    public void Throw(float power)
     {
         gameObject.layer = 14;
         transform.SetParent(null);
@@ -59,8 +64,9 @@ public class WeaponController : MonoBehaviour
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         rb.useGravity = true;
         col.isTrigger = false;
-        rb.AddRelativeForce(Vector3.forward * 30, ForceMode.Impulse);
+        rb.AddRelativeForce(Vector3.forward * power, ForceMode.Impulse);
         rb.AddTorque(Vector3.right * 300);
+        pickedUp = false;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -75,7 +81,7 @@ public class WeaponController : MonoBehaviour
                 {
                     if (health.gameObject.name == collision.gameObject.name)
                     {
-                        health.Damage(transform.position);
+                        health.Damage(collision.collider);
                         return;
                     }
                 }

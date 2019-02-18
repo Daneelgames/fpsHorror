@@ -21,15 +21,15 @@ public class HealthController : MonoBehaviour
     {
         if (other.gameObject.layer == 11)
         {
-            other.enabled = false;
-            Damage(other.gameObject.transform.position);
+            Damage(other);
         }
     }
 
-    public void Damage(Vector3 explosionPosition)
+    public void Damage(Collider other)
     {
         if (health > 0)
         {
+            other.enabled = false;
             health = 0;
             if (navMeshAgent)
                 navMeshAgent.enabled = false;
@@ -37,9 +37,11 @@ public class HealthController : MonoBehaviour
                 rb.constraints = RigidbodyConstraints.None;
 
             if (enemy)
-                enemy.CancelInvoke();
+            {
+                enemy.Dead();
+            }
         }
         if (rb)
-            rb.AddExplosionForce(500, explosionPosition, 3);
+            rb.AddExplosionForce(500, other.gameObject.transform.position, 3);
     }
 }

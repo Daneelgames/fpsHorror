@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    public PlayerController pc;
+
     public List<HealthController> healthControllers = new List<HealthController>();
     public List<InteractableObjectController> interactableObjectControllers = new List<InteractableObjectController>();
 
@@ -19,6 +21,9 @@ public class GameManager : MonoBehaviour
         }
         else
             Destroy(gameObject);
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     private void Update()
@@ -27,6 +32,11 @@ public class GameManager : MonoBehaviour
         {
             Restart();
         }
+    }
+
+    public void SetPlayer(PlayerController _pc)
+    {
+        pc = _pc;
     }
 
     void Restart()

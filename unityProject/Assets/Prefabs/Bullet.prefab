@@ -47,7 +47,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 1
-  prewarm: 0
+  prewarm: 1
   playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
@@ -865,7 +865,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 100
+      scalar: 500
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -4820,7 +4820,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dfd16c47815f934db6c7be6cffbfdfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mSpeed: 100
+  mSpeed: 50
   explosion: {fileID: 2921554143935461325, guid: c44f5880a9ca3e34e84a07001aaed438,
     type: 3}
   particles: {fileID: 9218785027490459494}

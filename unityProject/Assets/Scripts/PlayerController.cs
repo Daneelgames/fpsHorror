@@ -20,17 +20,34 @@ public class PlayerController : MonoBehaviour
     public HealthController healthController;
     public GameObject cam;
 
+    GameManager gm;
+
+    public LayerMask clippingLayerMask;
+
     float moveFB;
     float moveLR;
 
     float rotX;
     float rotY;
 
-    private void Start()
+    GameObject lwho;
+    GameObject rwho;
+    Vector3 leftWeaponHolderPositionNoClip = new Vector3(-0.35f, -0.4f, 0.1f);
+    Vector3 rightWeaponHolderPositionNoClip = new Vector3(0.35f, -0.4f, 0.1f);
+    Vector3 weaponHolderEulearNoClip = new Vector3(-55f, 0, 0);
+
+    private void Awake()
     {
+        gm = GameManager.instance;
+        gm.SetPlayer(this);
         characterController = GetComponent<CharacterController>();
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+
+        lwho = new GameObject();
+        lwho.transform.SetParent(cam.transform);
+        lwho.transform.localPosition = leftWeaponHolder.transform.localPosition;
+        rwho = new GameObject();
+        rwho.transform.SetParent(cam.transform);
+        rwho.transform.localPosition = rightWeaponHolder.transform.localPosition;
     }
 
     private void Update()
@@ -40,6 +57,7 @@ public class PlayerController : MonoBehaviour
             Shooting();
             Move();
             Interactions();
+            PreventWeaponClipping();
         }
 
         transform.position = new Vector3(transform.position.x, 0, transform.position.z);
@@ -58,8 +76,8 @@ public class PlayerController : MonoBehaviour
         rotX = Input.GetAxis("Mouse X") * sensitivity;
         rotY += Input.GetAxis("Mouse Y") * sensitivity;
 
-        if (rotY < -90) rotY = -90;
-        else if (rotY > 90) rotY = 90;
+        if (rotY < -50) rotY = -50;
+        else if (rotY > 50) rotY = 50;
 
         var movement = new Vector3(moveLR, 0, moveFB);
         transform.Rotate(0, rotX, 0);
@@ -71,14 +89,6 @@ public class PlayerController : MonoBehaviour
     private void LateUpdate()
     {
         cam.transform.localRotation = Quaternion.Euler(-rotY, 0f, 0f);
-    }
-
-    float ClampAngle(float angle, float from, float to)
-    {
-        // accepts e.g. -80, 80
-        if (angle < 0f) angle = 360 + angle;
-        if (angle > 180f) return Mathf.Max(angle, 360 + from);
-        return Mathf.Min(angle, to);
     }
 
     void Shooting()
@@ -96,7 +106,7 @@ public class PlayerController : MonoBehaviour
         {
             if (weaponLeft)
             {
-                weaponLeft.Trow();
+                weaponLeft.Throw(15);
                 weaponLeft = null;
             }
             if (actionAreaController.interactableObjectControllers.Count > 0)
@@ -108,13 +118,38 @@ public class PlayerController : MonoBehaviour
         {
             if (weaponRight)
             {
-                weaponRight.Trow();
+                weaponRight.Throw(15);
                 weaponRight = null;
             }
             if (actionAreaController.interactableObjectControllers.Count > 0)
             {
                 actionAreaController.Interact(rightWeaponHolder);
             }
+        }
+    }
+
+    void PreventWeaponClipping()
+    {
+        if (Physics.Raycast(lwho.transform.position, transform.forward, 0.75f, clippingLayerMask))
+        {
+            leftWeaponHolder.localPosition = leftWeaponHolderPositionNoClip;
+            leftWeaponHolder.localEulerAngles = weaponHolderEulearNoClip;
+        }
+        else
+        {
+            leftWeaponHolder.localPosition = lwho.transform.localPosition;
+            leftWeaponHolder.localEulerAngles = Vector3.zero;
+        }
+
+        if (Physics.Raycast(rwho.transform.position, transform.forward, 0.75f, clippingLayerMask))
+        {
+            rightWeaponHolder.localPosition = rightWeaponHolderPositionNoClip;
+            rightWeaponHolder.localEulerAngles = weaponHolderEulearNoClip;
+        }
+        else
+        {
+            rightWeaponHolder.localPosition = rwho.transform.localPosition;
+            rightWeaponHolder.localEulerAngles = Vector3.zero;
         }
     }
 

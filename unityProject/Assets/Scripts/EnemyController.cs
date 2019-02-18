@@ -13,13 +13,23 @@ public class EnemyController : MonoBehaviour
     public HealthController healthController;
     public NavMeshAgent agent;
 
+    public WeaponController weapon;
+
     public List<Vector3> waypoints = new List<Vector3>();
     int nextWp = 0;
 
+    public bool alert = false;
+
+    GameManager gm;
+    PlayerController pc;
     ActionAreaController actionAreaController;
 
     private void Start()
     {
+        weapon.PickUp();
+        weapon.name += gameObject.name;
+        gm = GameManager.instance;
+        pc = gm.pc;
         healthController.enemy = this;
         ChooseBehavior();
     }
@@ -43,7 +53,7 @@ public class EnemyController : MonoBehaviour
 
             case Behavior.Wander:
                 agent.speed = normalSpeed;
-                Invoke("Wander", 0);
+                Wander();
                 break;
 
             case Behavior.Patrol:
@@ -51,7 +61,19 @@ public class EnemyController : MonoBehaviour
                 agent.autoBraking = false;
                 GotoNextPoint();
                 break;
+
+            case Behavior.Chase:
+                agent.speed = runSpeed;
+                agent.autoBraking = false;
+                ChasePlayer();
+                break;
         }
+    }
+
+    void ChasePlayer()
+    {
+        if (!weapon.range)
+            agent.SetDestination(pc.transform.position);
     }
 
     void GotoNextPoint()
@@ -59,17 +81,35 @@ public class EnemyController : MonoBehaviour
         if (waypoints.Count == 0)
             return;
 
-        agent.destination = waypoints[nextWp];
+        if (agent.enabled)
+            agent.destination = waypoints[nextWp];
         nextWp = (nextWp + 1) % waypoints.Count;
     }
 
     void Wander()
     {
         Vector2 newPos = new Vector2(Random.Range(-18f, 18), Random.Range(-9f, 9f));
-        agent.SetDestination(newPos);
+        if (agent.enabled)
+            agent.SetDestination(newPos);
         Invoke("Wander", Random.Range(1, 5));
     }
 
+    public void PlayerFound(bool found)
+    {
+        if (found)
+        {
+            behavior = Behavior.Chase;
+
+            CancelInvoke();
+            ChooseBehavior();
+            alert = true;
+        }
+        else if (!found && behavior == Behavior.Chase)
+        {
+            behavior = Behavior.Wander;
+            Invoke("ChooseBehavior", 1);
+        }
+    }
 
     public void SetActionAreaController(ActionAreaController area)
     {
@@ -88,5 +128,11 @@ public class EnemyController : MonoBehaviour
                     Gizmos.DrawCube(t, Vector3.one / 2);
             }
         }
+    }
+
+    public void Dead()
+    {
+        CancelInvoke();
+        weapon.Throw(10f);
     }
 }

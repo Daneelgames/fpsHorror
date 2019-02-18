@@ -12,6 +12,8 @@ public class ActionAreaController : MonoBehaviour
     public List<InteractableObjectController> interactableObjectControllers = new List<InteractableObjectController>();
     GameManager gm;
 
+    float delay = 0.2f;
+
     private void Start()
     {
         gm = GameManager.instance;
@@ -25,6 +27,9 @@ public class ActionAreaController : MonoBehaviour
 
     private void Update()
     {
+        if (delay > 0)
+            delay -= Time.deltaTime;
+
         if (pc)
             transform.position = pc.transform.position;
         else if (ec)
@@ -39,8 +44,11 @@ public class ActionAreaController : MonoBehaviour
             {
                 if (ioc.gameObject.name == other.gameObject.name)
                 {
-                    interactableObjectControllers.Add(ioc);
-                    return;
+                    if (ioc.weapon.pickedUp == false)
+                    {
+                        interactableObjectControllers.Add(ioc);
+                        return;
+                    }
                 }
             }
         }
@@ -64,20 +72,24 @@ public class ActionAreaController : MonoBehaviour
 
     public void Interact(Transform arm)
     {
-        InteractableObjectController obj = interactableObjectControllers[0]; // pick closest interactable object
-        float distance = 10;
-        foreach(InteractableObjectController ioc in interactableObjectControllers)
+        if (delay <= 0)
         {
-            var newDistance = Vector3.Distance(ioc.transform.position, transform.position);
-            if (newDistance < distance)
+            delay = 0.2f;
+            InteractableObjectController obj = interactableObjectControllers[0]; // pick closest interactable object
+            float distance = 10;
+            foreach (InteractableObjectController ioc in interactableObjectControllers)
             {
-                distance = newDistance;
-                obj = ioc;
+                var newDistance = Vector3.Distance(ioc.transform.position, transform.position);
+                if (newDistance < distance)
+                {
+                    distance = newDistance;
+                    obj = ioc;
+                }
             }
-        }
 
-        pc.PickUpWeapon(obj, arm);
-        interactableObjectControllers.Remove(obj);
-        interactableObjectControllers.Sort();
+            pc.PickUpWeapon(obj, arm);
+            interactableObjectControllers.Remove(obj);
+            interactableObjectControllers.Sort();
+        }
     }
 }
