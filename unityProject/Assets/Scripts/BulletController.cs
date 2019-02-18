@@ -4,62 +4,46 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
+    public float mSpeed = 10.0f;
+
     public GameObject explosion;
-    public float movespeed = 5;
-    public float distanceToTravel;
-
     public ParticleSystem particles;
-    ParticleSystem.EmissionModule particleEmission;
-
-    [HideInInspector]
-    public Vector3 currentTarget;
-    [HideInInspector]
     public LayerMask layerMask;
-
-    float originalSpeed = 5;
-    Ray ray;
-    RaycastHit hit;
+    ParticleSystem.EmissionModule particleEmission;
     bool dead = false;
+    Vector3 mPrevPos;
 
     private void Awake()
     {
         particleEmission = particles.emission;
-        originalSpeed = movespeed;
     }
 
-    /*
-    void UpdateDistance()
+    private void Start()
     {
-        ray = new Ray(transform.position, transform.TransformVector(Vector3.forward));
-        if (Physics.Raycast(ray, out hit, 1000, layerMask))
+        mPrevPos = transform.position;
+    }
+
+    private void Update()
+    {
+        mPrevPos = transform.position;
+        transform.Translate(0.0f, 0.0f, mSpeed * Time.deltaTime);
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(mPrevPos, (transform.position - mPrevPos).normalized,  out hit, (transform.position - mPrevPos).magnitude, layerMask))
         {
-            if (Vector3.Distance(currentTarget,hit.point) > 0.5f)
-            {
-                distanceToTravel = Vector3.Distance(transform.position, hit.point);
-                float newBulletSpeed = originalSpeed;
-                movespeed = distanceToTravel / newBulletSpeed;
-                currentTarget = hit.point;
-            }
+            Dead(hit.point);
         }
     }
-    */
 
-    void FixedUpdate()
+    void Dead(Vector3 pos)
     {
-        if (distanceToTravel <= 0.01f) // have we arrived our target?
+        if (!dead)
         {
-            if (!dead)
-            {
-                Instantiate(explosion, transform.position, Quaternion.identity);
-                Destroy(gameObject,1);
-                dead = true;
-                particleEmission.enabled = false;
-            }
-        }
-        else
-        {
-            transform.Translate(Vector3.forward * movespeed);
-            distanceToTravel -= movespeed;
+            Instantiate(explosion, pos, Quaternion.identity);
+            Destroy(gameObject, 1);
+            dead = true;
+            particleEmission.enabled = false;
         }
     }
 }

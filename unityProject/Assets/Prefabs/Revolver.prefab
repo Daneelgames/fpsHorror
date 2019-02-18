@@ -195,6 +195,7 @@ GameObject:
   - component: {fileID: 5746998196463960349}
   - component: {fileID: 4972508938528717648}
   - component: {fileID: 173948881388851665}
+  - component: {fileID: 8708443548877730472}
   - component: {fileID: 2091959313}
   - component: {fileID: 2091959314}
   m_Layer: 13
@@ -234,6 +235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d00558335ac07f2459fe7a4162256847, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delay: 0.3
   bulletPrefab: {fileID: 3621886752712974987, guid: ab7fc44a0e975724b8dd586f869f2b24,
     type: 3}
   shotHolder: {fileID: 8551754798127620712}
@@ -255,6 +257,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weapon: {fileID: 4972508938528717648}
+--- !u!114 &8708443548877730472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5746998196463960322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8d02a23a1e0aab4c9f75f7475b5a9b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 0
+  rb: {fileID: 2091959313}
+  navMeshAgent: {fileID: 0}
+  enemy: {fileID: 0}
 --- !u!54 &2091959313
 Rigidbody:
   m_ObjectHideFlags: 0

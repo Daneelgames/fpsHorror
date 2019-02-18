@@ -284,7 +284,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1
+      scalar: 0.5
       minScalar: 0.1
       maxCurve:
         serializedVersion: 2
@@ -4820,12 +4820,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dfd16c47815f934db6c7be6cffbfdfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mSpeed: 100
   explosion: {fileID: 2921554143935461325, guid: c44f5880a9ca3e34e84a07001aaed438,
     type: 3}
-  movespeed: 5
-  distanceToTravel: 0
   particles: {fileID: 9218785027490459494}
-  currentTarget: {x: 0, y: 0, z: 0}
   layerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 30208

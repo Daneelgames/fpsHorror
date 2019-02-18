@@ -40,6 +40,6 @@ public class HealthController : MonoBehaviour
                 enemy.CancelInvoke();
         }
         if (rb)
-            rb.AddExplosionForce(500, explosionPosition, 1);
+            rb.AddExplosionForce(500, explosionPosition, 3);
     }
 }
