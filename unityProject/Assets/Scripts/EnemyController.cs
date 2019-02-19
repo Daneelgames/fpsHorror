@@ -26,7 +26,7 @@ public class EnemyController : MonoBehaviour
 
     private void Start()
     {
-        weapon.PickUp();
+        weapon.PickUp(null);
         weapon.name += gameObject.name;
         gm = GameManager.instance;
         pc = gm.pc;

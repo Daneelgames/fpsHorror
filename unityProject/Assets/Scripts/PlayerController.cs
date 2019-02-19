@@ -12,13 +12,18 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     Transform leftWeaponHolder;
+    Animator leftWeaponHolderAnim;
     [SerializeField]
     Transform rightWeaponHolder;
+    Animator rightWeaponHolderAnim;
 
     public WeaponController weaponLeft;
     public WeaponController weaponRight;
     public HealthController healthController;
     public GameObject cam;
+
+    bool leftWeaponMelee = false;
+    bool rightWeaponMelee = false;
 
     GameManager gm;
 
@@ -32,9 +37,6 @@ public class PlayerController : MonoBehaviour
 
     GameObject lwho;
     GameObject rwho;
-    Vector3 leftWeaponHolderPositionNoClip = new Vector3(-0.35f, -0.4f, 0.1f);
-    Vector3 rightWeaponHolderPositionNoClip = new Vector3(0.35f, -0.4f, 0.1f);
-    Vector3 weaponHolderEulearNoClip = new Vector3(-55f, 0, 0);
 
     private void Awake()
     {
@@ -48,6 +50,9 @@ public class PlayerController : MonoBehaviour
         rwho = new GameObject();
         rwho.transform.SetParent(cam.transform);
         rwho.transform.localPosition = rightWeaponHolder.transform.localPosition;
+
+        leftWeaponHolderAnim = leftWeaponHolder.GetComponent<Animator>();
+        rightWeaponHolderAnim = rightWeaponHolder.GetComponent<Animator>();
     }
 
     private void Update()
@@ -94,10 +99,20 @@ public class PlayerController : MonoBehaviour
     void Shooting()
     {
         if (Input.GetButtonDown("Fire1") && weaponLeft)
-            weaponLeft.Shoot();
+        {
+            if (!leftWeaponMelee)
+                weaponLeft.Shoot("PlayerProjectile");
+            else
+                weaponLeft.Melee();
+        }
 
         if (Input.GetButtonDown("Fire2") && weaponRight)
-            weaponRight.Shoot();
+        {
+            if (!rightWeaponMelee)
+                weaponRight.Shoot("PlayerProjectile");
+            else
+                weaponRight.Melee();
+        }
     }
 
     void Interactions()
@@ -130,35 +145,35 @@ public class PlayerController : MonoBehaviour
 
     void PreventWeaponClipping()
     {
-        if (Physics.Raycast(lwho.transform.position, transform.forward, 0.75f, clippingLayerMask))
+        if (Physics.Raycast(lwho.transform.position, cam.transform.forward, 1.5f, clippingLayerMask))
         {
-            leftWeaponHolder.localPosition = leftWeaponHolderPositionNoClip;
-            leftWeaponHolder.localEulerAngles = weaponHolderEulearNoClip;
+            leftWeaponHolderAnim.SetBool("Clipping", true);
+            leftWeaponMelee = true;
         }
         else
         {
-            leftWeaponHolder.localPosition = lwho.transform.localPosition;
-            leftWeaponHolder.localEulerAngles = Vector3.zero;
+            leftWeaponHolderAnim.SetBool("Clipping", false);
+            leftWeaponMelee = false;
         }
 
-        if (Physics.Raycast(rwho.transform.position, transform.forward, 0.75f, clippingLayerMask))
+        if (Physics.Raycast(rwho.transform.position, cam.transform.forward, 1.5f, clippingLayerMask))
         {
-            rightWeaponHolder.localPosition = rightWeaponHolderPositionNoClip;
-            rightWeaponHolder.localEulerAngles = weaponHolderEulearNoClip;
+            rightWeaponHolderAnim.SetBool("Clipping", true);
+            rightWeaponMelee = true;
         }
         else
         {
-            rightWeaponHolder.localPosition = rwho.transform.localPosition;
-            rightWeaponHolder.localEulerAngles = Vector3.zero;
+            rightWeaponHolderAnim.SetBool("Clipping", false);
+            rightWeaponMelee = false;
         }
     }
 
     public void PickUpWeapon(InteractableObjectController wpn, Transform hand)
     {
-        wpn.weapon.PickUp();
         if (hand == leftWeaponHolder)
         {
             weaponLeft = wpn.weapon;
+            weaponLeft.PickUp(leftWeaponHolderAnim);
             weaponLeft.transform.SetParent(leftWeaponHolder);
             weaponLeft.transform.localEulerAngles = Vector3.zero;
             weaponLeft.transform.localPosition = Vector3.zero;
@@ -166,6 +181,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             weaponRight = wpn.weapon;
+            weaponRight.PickUp(rightWeaponHolderAnim);
             weaponRight.transform.SetParent(rightWeaponHolder);
             weaponRight.transform.localEulerAngles = Vector3.zero;
             weaponRight.transform.localPosition = Vector3.zero;

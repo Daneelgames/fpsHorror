@@ -8,6 +8,8 @@ public class WeaponController : MonoBehaviour
 
     public float delay = 0.3f;
     float currentDelay = 0;
+    public float delayMelee = 0.3f;
+    float currentDelayMelee = 0;
     public GameObject bulletPrefab;
     public Transform shotHolder;
     public LayerMask layerMask;
@@ -15,6 +17,8 @@ public class WeaponController : MonoBehaviour
     public Collider col;
 
     public bool pickedUp = false;
+
+    Animator weaponHolderAnim;
 
     GameManager gm;
 
@@ -27,9 +31,14 @@ public class WeaponController : MonoBehaviour
     {
         if (currentDelay > 0)
             currentDelay -= Time.deltaTime;
+
+        if (currentDelayMelee > 0)
+        {
+            currentDelayMelee -= Time.deltaTime;
+        }
     }
 
-    public void Shoot()
+    public void Shoot(string tag)
     {
         if (currentDelay <= 0)
         {
@@ -39,21 +48,36 @@ public class WeaponController : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 1000, layerMask))
             {
+                if (weaponHolderAnim)
+                    weaponHolderAnim.SetTrigger("Shot");
+
                 Vector3 dir = hit.point - transform.position;
                 //Quaternion rot = Quaternion.LookRotation(dir);
                 Quaternion rot = transform.rotation;
                 GameObject clone = Instantiate(bulletPrefab, shotHolder.position, rot) as GameObject;
+                clone.tag = tag;
             }
         }
     }
 
-    public void PickUp()
+    public void Melee()
+    {
+        if (currentDelayMelee <= 0)
+        {
+            currentDelayMelee = delayMelee;
+            if (weaponHolderAnim)
+                weaponHolderAnim.SetTrigger("Melee");
+        }
+    }
+
+    public void PickUp(Animator anim)
     {
         rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
         rb.isKinematic = true;
         rb.useGravity = false;
         col.isTrigger = true;
         pickedUp = true;
+        weaponHolderAnim = anim;
     }
 
     public void Throw(float power)

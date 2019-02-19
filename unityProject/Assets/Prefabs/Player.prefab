@@ -254,7 +254,7 @@ MonoBehaviour:
   cam: {fileID: 4634466338923242505}
   clippingLayerMask:
     serializedVersion: 2
-    m_Bits: 4608
+    m_Bits: 12800
 --- !u!114 &2197254997273401939
 MonoBehaviour:
   m_ObjectHideFlags: 0

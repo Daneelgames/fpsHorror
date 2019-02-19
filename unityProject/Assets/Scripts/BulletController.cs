@@ -39,7 +39,8 @@ public class BulletController : MonoBehaviour
 
     void Dead(Vector3 pos)
     {
-        Instantiate(explosion, pos, Quaternion.identity);
+        GameObject expl = Instantiate(explosion, pos, Quaternion.identity);
+        expl.gameObject.tag = gameObject.tag;
         Destroy(gameObject, 1);
         dead = true;
         particleEmission.enabled = false;

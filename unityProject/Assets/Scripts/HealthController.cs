@@ -21,7 +21,8 @@ public class HealthController : MonoBehaviour
     {
         if (other.gameObject.layer == 11)
         {
-            Damage(other);
+            if ((enemy && other.gameObject.tag == "PlayerProjectile") || (!enemy && other.gameObject.tag == "EnemyProjectile"))
+                Damage(other);
         }
     }
 
