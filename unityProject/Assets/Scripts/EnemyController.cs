@@ -24,14 +24,25 @@ public class EnemyController : MonoBehaviour
     PlayerController pc;
     ActionAreaController actionAreaController;
 
+    [SerializeField]
+    ParticleSystem particlesSeeThroughWalls;
+    ParticleSystem.EmissionModule particlesEmit;
+    RaycastHit hit;
+
+    [SerializeField]
+    LayerMask layerMask;
+
     private void Start()
     {
-        weapon.PickUp(null);
+        weapon.PickUp(null, null, this);
         weapon.name += gameObject.name;
         gm = GameManager.instance;
         pc = gm.pc;
         healthController.enemy = this;
         ChooseBehavior();
+
+        particlesEmit = particlesSeeThroughWalls.emission;
+        InvokeRepeating("CheckIfMeshIsVisible", 0.1f, 0.1f);
     }
 
     private void Update()
@@ -40,6 +51,31 @@ public class EnemyController : MonoBehaviour
         { 
             if (agent.enabled && !agent.pathPending && agent.remainingDistance < 0.5f)
                 GotoNextPoint();
+        }
+    }
+
+    void CheckIfMeshIsVisible()
+    {
+        if (Physics.Raycast(transform.position + Vector3.up, (pc.transform.position - transform.position).normalized, out hit, Vector3.Distance(transform.position, pc.transform.position), layerMask))
+        {
+            if (hit.collider.gameObject == pc.gameObject)
+            {
+                if (particlesEmit.enabled == true)
+                    particlesEmit.enabled = false;
+            }
+            else // if hit someting else
+            {
+                if (healthController.health > 0 && particlesEmit.enabled == false)
+                    particlesEmit.enabled = true;
+                else
+                    particlesEmit.enabled = false;
+            }
+            if (healthController.health <= 0 && particlesEmit.enabled == true)
+                particlesEmit.enabled = false;
+        }
+        else
+        {
+            particlesEmit.enabled = false;
         }
     }
 
@@ -100,7 +136,7 @@ public class EnemyController : MonoBehaviour
         {
             behavior = Behavior.Chase;
 
-            CancelInvoke();
+            CancelInvoke("Wander");
             ChooseBehavior();
             alert = true;
         }

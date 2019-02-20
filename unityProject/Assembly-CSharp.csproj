@@ -68,6 +68,7 @@
     <Compile Include="Assets\Ibuprogames\OilPaint\Scripts\OilPaintIntensities.cs" />
     <Compile Include="Assets\Ibuprogames\OilPaint\Scripts\OilPaintModes.cs" />
     <Compile Include="Assets\Ibuprogames\OilPaint\Scripts\RenderDepth.cs" />
+    <Compile Include="Assets\MeleeColliderController.cs" />
     <Compile Include="Assets\Scripts\ActionAreaController.cs" />
     <Compile Include="Assets\Scripts\BulletController.cs" />
     <Compile Include="Assets\Scripts\DestroyInTime.cs" />

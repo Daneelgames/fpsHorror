@@ -29,9 +29,7 @@ public class BulletController : MonoBehaviour
         transform.Translate(0.0f, 0.0f, mSpeed * Time.deltaTime);
 
         RaycastHit hit;
-        //if (Physics.Raycast(mPrevPos, (transform.position - mPrevPos).normalized,  out hit, (transform.position - mPrevPos).magnitude, layerMask))
-        //if (Physics.CapsuleCast(mPrevPos, transform.position, 0.1f, transform.forward, out hit, (transform.position - mPrevPos).magnitude, layerMask) && !dead && !hit.collider.isTrigger)
-        if (Physics.CapsuleCast(mPrevPos, transform.position, 0.1f, transform.forward, out hit, 1, layerMask) && !dead && !hit.collider.isTrigger)
+        if (Physics.CapsuleCast(mPrevPos, transform.position, 0.2f, transform.forward, out hit, 1, layerMask) && !dead && !hit.collider.isTrigger)
         {
             Dead(hit.point);
         }

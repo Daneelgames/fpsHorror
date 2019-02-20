@@ -22,6 +22,9 @@ public class PlayerController : MonoBehaviour
     public HealthController healthController;
     public GameObject cam;
 
+    public MeleeColliderController leftMeleeCollider;
+    public MeleeColliderController rightMeleeCollider;
+
     bool leftWeaponMelee = false;
     bool rightWeaponMelee = false;
 
@@ -103,7 +106,10 @@ public class PlayerController : MonoBehaviour
             if (!leftWeaponMelee)
                 weaponLeft.Shoot("PlayerProjectile");
             else
+            {
+                StartCoroutine(MeleeAttack(leftMeleeCollider));
                 weaponLeft.Melee();
+            }
         }
 
         if (Input.GetButtonDown("Fire2") && weaponRight)
@@ -111,8 +117,18 @@ public class PlayerController : MonoBehaviour
             if (!rightWeaponMelee)
                 weaponRight.Shoot("PlayerProjectile");
             else
+            {
+                StartCoroutine(MeleeAttack(rightMeleeCollider));
                 weaponRight.Melee();
+            }
         }
+    }
+
+    IEnumerator MeleeAttack(MeleeColliderController meleeColliderController)
+    {
+        meleeColliderController.Dangerous(gameObject, true);
+        yield return new WaitForSeconds(0.1f);
+        meleeColliderController.Dangerous(gameObject, false);
     }
 
     void Interactions()
@@ -173,7 +189,7 @@ public class PlayerController : MonoBehaviour
         if (hand == leftWeaponHolder)
         {
             weaponLeft = wpn.weapon;
-            weaponLeft.PickUp(leftWeaponHolderAnim);
+            weaponLeft.PickUp(leftWeaponHolderAnim, this, null);
             weaponLeft.transform.SetParent(leftWeaponHolder);
             weaponLeft.transform.localEulerAngles = Vector3.zero;
             weaponLeft.transform.localPosition = Vector3.zero;
@@ -181,7 +197,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             weaponRight = wpn.weapon;
-            weaponRight.PickUp(rightWeaponHolderAnim);
+            weaponRight.PickUp(rightWeaponHolderAnim, this, null);
             weaponRight.transform.SetParent(rightWeaponHolder);
             weaponRight.transform.localEulerAngles = Vector3.zero;
             weaponRight.transform.localPosition = Vector3.zero;

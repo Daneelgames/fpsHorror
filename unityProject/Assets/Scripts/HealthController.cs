@@ -30,7 +30,9 @@ public class HealthController : MonoBehaviour
     {
         if (health > 0)
         {
-            other.enabled = false;
+            if (other.gameObject.layer == 11)
+                other.enabled = false;
+
             health = 0;
             if (navMeshAgent)
                 navMeshAgent.enabled = false;
