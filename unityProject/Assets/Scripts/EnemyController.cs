@@ -32,8 +32,11 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     LayerMask layerMask;
 
+    EnemySightController enemySight;
+
     private void Start()
     {
+        enemySight = GetComponent<EnemySightController>();
         weapon.PickUp(null, null, this);
         weapon.name += gameObject.name;
         gm = GameManager.instance;
@@ -47,10 +50,17 @@ public class EnemyController : MonoBehaviour
 
     private void Update()
     {
-        if (behavior == Behavior.Patrol)
-        { 
-            if (agent.enabled && !agent.pathPending && agent.remainingDistance < 0.5f)
-                GotoNextPoint();
+        if (healthController.health > 0)
+        {
+            if (behavior == Behavior.Patrol)
+            {
+                if (agent.enabled && !agent.pathPending && agent.remainingDistance < 0.5f)
+                    GotoNextPoint();
+            }
+            else if (behavior == Behavior.Chase)
+            {
+                ChasePlayer();
+            }
         }
     }
 
@@ -101,7 +111,6 @@ public class EnemyController : MonoBehaviour
             case Behavior.Chase:
                 agent.speed = runSpeed;
                 agent.autoBraking = false;
-                ChasePlayer();
                 break;
         }
     }
@@ -110,6 +119,22 @@ public class EnemyController : MonoBehaviour
     {
         if (!weapon.range)
             agent.SetDestination(pc.transform.position);
+        else
+        {
+            if (enemySight.playerInSight)
+            {
+                agent.isStopped = true;
+
+                transform.LookAt(pc.transform.position);
+                if (pc.healthController.health > 0 && weapon)
+                    weapon.Shoot("EnemyProjectile");
+            }
+            else
+            {
+                agent.isStopped = false;
+                agent.SetDestination(pc.transform.position);
+            }
+        }
     }
 
     void GotoNextPoint()
@@ -140,11 +165,6 @@ public class EnemyController : MonoBehaviour
             ChooseBehavior();
             alert = true;
         }
-        else if (!found && behavior == Behavior.Chase)
-        {
-            behavior = Behavior.Wander;
-            Invoke("ChooseBehavior", 1);
-        }
     }
 
     public void SetActionAreaController(ActionAreaController area)
@@ -170,5 +190,6 @@ public class EnemyController : MonoBehaviour
     {
         CancelInvoke();
         weapon.Throw(10f);
+        weapon = null;
     }
 }

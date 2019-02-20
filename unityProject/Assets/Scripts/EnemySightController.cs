@@ -8,6 +8,9 @@ public class EnemySightController : MonoBehaviour
     public float fovAngle = 100;
     public bool playerInSight = false;
 
+    [SerializeField]
+    LayerMask layerMask;
+
     EnemyController ec;
     NavMeshAgent nav;
     Animator anim;
@@ -32,20 +35,21 @@ public class EnemySightController : MonoBehaviour
 
         if (angle < fovAngle * 0.5f)
         {
+            print("player in angle");
             RaycastHit hit;
             var distance = Vector3.Distance(transform.position + transform.up, pc.transform.position + transform.up);
 
-            if (Physics.Raycast(transform.position + transform.up, direction.normalized, out hit, distance))
+            if (Physics.Raycast(transform.position + transform.up, direction.normalized, out hit, distance, layerMask))
             {
                 if (hit.collider.gameObject == pc.gameObject)
                 {
                     playerInSight = true;
+                    ec.PlayerFound(playerInSight);
                 }
                 else
                 {
                     playerInSight = false;
                 }
-                ec.PlayerFound(playerInSight);
             }
         }
     }

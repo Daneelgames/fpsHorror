@@ -89,7 +89,8 @@ public class ActionAreaController : MonoBehaviour
 
             pc.PickUpWeapon(obj, arm);
             interactableObjectControllers.Remove(obj);
-            interactableObjectControllers.Sort();
+            if (interactableObjectControllers.Count > 0)
+                interactableObjectControllers.Sort();
         }
     }
 }
