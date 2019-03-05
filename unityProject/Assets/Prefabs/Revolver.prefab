@@ -236,13 +236,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 1
-  delay: 0.2
+  ammo: 6
+  delay: 0.3
+  delayMelee: 0.3
   bulletPrefab: {fileID: 3621886752712974987, guid: ab7fc44a0e975724b8dd586f869f2b24,
     type: 3}
   shotHolder: {fileID: 8551754798127620712}
   layerMask:
     serializedVersion: 2
-    m_Bits: 5633
+    m_Bits: 4608
   rb: {fileID: 2091959313}
   col: {fileID: 2091959314}
   pickedUp: 0

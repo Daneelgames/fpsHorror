@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AcidMaterialWalls
+  m_Shader: {fileID: 4800000, guid: 8441bc5d2930f9f4990f1e002564815e, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - Texture2D_E99164AF:
+        m_Texture: {fileID: 2800000, guid: 961b6c875292a8944be4602c96418f79, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_2646BDE6: 5
+    - Vector1_5FEB7C89: 0.52
+    - Vector1_66336EB: 0.1
+    m_Colors:
+    - Color_2AA0F82E: {r: 0.13207549, g: 0.1202228, b: 0, a: 1}
+    - Vector2_2FD8C49B: {r: 0.05, g: 0.05, b: 0.05, a: 0}

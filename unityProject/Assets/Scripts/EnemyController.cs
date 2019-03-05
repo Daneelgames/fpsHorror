@@ -8,17 +8,18 @@ public class EnemyController : MonoBehaviour
     public float normalSpeed = 3;
     public float runSpeed = 3;
 
-    public enum Behavior {Wait, Patrol, Wander, Chase};
+    public enum Behavior {Wait, Patrol, Wander, Chase, Inspect, Dead};
     public Behavior behavior = Behavior.Wait;
-    public HealthController healthController;
     public NavMeshAgent agent;
 
     public WeaponController weapon;
+    public List<HealthController> healthControllers = new List<HealthController>();
 
     public List<Vector3> waypoints = new List<Vector3>();
     int nextWp = 0;
 
     public bool alert = false;
+    public Animator anim;
 
     GameManager gm;
     PlayerController pc;
@@ -33,6 +34,9 @@ public class EnemyController : MonoBehaviour
     LayerMask layerMask;
 
     EnemySightController enemySight;
+    float explosionDelay = 0;
+
+    public float rbMass = 0.5f;
 
     private void Start()
     {
@@ -41,7 +45,6 @@ public class EnemyController : MonoBehaviour
         weapon.name += gameObject.name;
         gm = GameManager.instance;
         pc = gm.pc;
-        healthController.enemy = this;
         ChooseBehavior();
 
         particlesEmit = particlesSeeThroughWalls.emission;
@@ -50,7 +53,7 @@ public class EnemyController : MonoBehaviour
 
     private void Update()
     {
-        if (healthController.health > 0)
+        if (behavior != Behavior.Dead)
         {
             if (behavior == Behavior.Patrol)
             {
@@ -61,26 +64,42 @@ public class EnemyController : MonoBehaviour
             {
                 ChasePlayer();
             }
+            else if (behavior == Behavior.Inspect)
+            {
+                if (agent.enabled && !agent.pathPending && agent.remainingDistance < 0.5f)
+                {
+                    behavior = Behavior.Wait;
+                    Invoke("Wander", Random.Range(1,5));
+                }
+            }
+
+            if (agent.velocity.magnitude > 0)
+                anim.SetBool("Run", true);
+            else
+                anim.SetBool("Run", false);
         }
+
+        if (explosionDelay > 0)
+            explosionDelay -= Time.deltaTime;
     }
 
     void CheckIfMeshIsVisible()
     {
         if (Physics.Raycast(transform.position + Vector3.up, (pc.transform.position - transform.position).normalized, out hit, Vector3.Distance(transform.position, pc.transform.position), layerMask))
         {
-            if (hit.collider.gameObject == pc.gameObject)
+            if (hit.collider.gameObject == pc.gameObject) // if player see enemy
             {
                 if (particlesEmit.enabled == true)
                     particlesEmit.enabled = false;
             }
-            else // if hit someting else
+            else // if not
             {
-                if (healthController.health > 0 && particlesEmit.enabled == false)
+                if (behavior != Behavior.Dead && particlesEmit.enabled == false)
                     particlesEmit.enabled = true;
                 else
                     particlesEmit.enabled = false;
             }
-            if (healthController.health <= 0 && particlesEmit.enabled == true)
+            if (behavior == Behavior.Dead && particlesEmit.enabled == true)
                 particlesEmit.enabled = false;
         }
         else
@@ -99,16 +118,22 @@ public class EnemyController : MonoBehaviour
 
             case Behavior.Wander:
                 agent.speed = normalSpeed;
+                agent.autoBraking = true;
                 Wander();
                 break;
 
             case Behavior.Patrol:
                 agent.speed = normalSpeed;
                 agent.autoBraking = false;
-                GotoNextPoint();
+                //GotoNextPoint();
                 break;
 
             case Behavior.Chase:
+                agent.speed = runSpeed;
+                agent.autoBraking = false;
+                break;
+
+            case Behavior.Inspect:
                 agent.speed = runSpeed;
                 agent.autoBraking = false;
                 break;
@@ -125,7 +150,11 @@ public class EnemyController : MonoBehaviour
             {
                 agent.isStopped = true;
 
-                transform.LookAt(pc.transform.position);
+                Vector3 lTargetDir = pc.transform.position - transform.position;
+                lTargetDir.y = 0.0f;
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lTargetDir), Time.time * 1f);
+
+                //transform.LookAt(pc.transform.position);
                 if (pc.healthController.health > 0 && weapon)
                     weapon.Shoot("EnemyProjectile");
             }
@@ -135,6 +164,11 @@ public class EnemyController : MonoBehaviour
                 agent.SetDestination(pc.transform.position);
             }
         }
+    }
+
+    void InspectSound(Vector3 soundPosition)
+    {
+        agent.destination = soundPosition;
     }
 
     void GotoNextPoint()
@@ -159,9 +193,8 @@ public class EnemyController : MonoBehaviour
     {
         if (found)
         {
-            behavior = Behavior.Chase;
-
             CancelInvoke("Wander");
+            behavior = Behavior.Chase;
             ChooseBehavior();
             alert = true;
         }
@@ -186,10 +219,43 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    public void HearSound(Vector3 soundPosition)
+    {
+        if (behavior != Behavior.Chase && agent.enabled)
+        {
+            CancelInvoke("Wander");
+            behavior = Behavior.Inspect;
+            ChooseBehavior();
+            InspectSound(soundPosition);
+        }
+    }
+
+    public void AddHealthController(HealthController hc)
+    {
+        healthControllers.Add(hc);
+    }
+
+    public void Explosion(Vector3 explosionOrigin)
+    {
+        if (explosionDelay <= 0)
+        {
+            explosionDelay = 0.5f;
+            foreach (HealthController hc in healthControllers)
+            {
+                hc.Explosion(explosionOrigin);
+            }
+        }
+    }
+
     public void Dead()
     {
         CancelInvoke();
+        enemySight.CancelInvoke();
         weapon.Throw(10f);
         weapon = null;
+        if (particlesEmit.enabled == true)
+            particlesEmit.enabled = false;
+
+        behavior = Behavior.Dead;
     }
 }

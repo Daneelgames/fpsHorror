@@ -8,12 +8,18 @@ public class HealthController : MonoBehaviour
     public int health = 1;
     public Rigidbody rb;
     public NavMeshAgent navMeshAgent;
-
-    [HideInInspector]
     public EnemyController enemy;
 
     private void Start()
     {
+        rb = GetComponent<Rigidbody>();
+        if (enemy)
+        {
+            enemy.AddHealthController(this);
+            gameObject.name = gameObject.name + enemy.gameObject.name;
+            rb.mass = enemy.rbMass;
+        }
+            
         GameManager.instance.AddHealthController(this);
     }
 
@@ -28,12 +34,14 @@ public class HealthController : MonoBehaviour
 
     public void Damage(Collider other)
     {
-        if (health > 0)
+        if (health > 0 && enemy && enemy.behavior != EnemyController.Behavior.Dead)
         {
+            health = 0;
+            enemy.anim.enabled = false;
+
             if (other.gameObject.layer == 11)
                 other.enabled = false;
 
-            health = 0;
             if (navMeshAgent)
                 navMeshAgent.enabled = false;
             if (rb)
@@ -44,7 +52,14 @@ public class HealthController : MonoBehaviour
                 enemy.Dead();
             }
         }
+        
+        if (enemy)
+            enemy.Explosion(other.gameObject.transform.position);
+    }
+
+    public void Explosion(Vector3 explosionOrigin)
+    {
         if (rb)
-            rb.AddExplosionForce(500, other.gameObject.transform.position, 3);
+            rb.AddExplosionForce(1000, explosionOrigin - Vector3.up, 10);
     }
 }

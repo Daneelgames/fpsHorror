@@ -21,6 +21,8 @@ public class BulletController : MonoBehaviour
     private void Start()
     {
         mPrevPos = transform.position;
+        if (gameObject.tag == "EnemyProjectile")
+            mSpeed /= 2;
     }
 
     private void Update()

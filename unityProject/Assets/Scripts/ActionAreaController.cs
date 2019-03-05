@@ -14,6 +14,8 @@ public class ActionAreaController : MonoBehaviour
 
     float delay = 0.2f;
 
+    UiController ui;
+
     private void Start()
     {
         gm = GameManager.instance;
@@ -23,6 +25,8 @@ public class ActionAreaController : MonoBehaviour
             pc.SetActionAreaController(this);
         else if (ec)
             ec.SetActionAreaController(this);
+
+        ui = UiController.instance;
     }
 
     private void Update()
@@ -47,6 +51,7 @@ public class ActionAreaController : MonoBehaviour
                     if (ioc.weapon.pickedUp == false)
                     {
                         interactableObjectControllers.Add(ioc);
+                        ui.UpdateInteractionIcon();
                         return;
                     }
                 }
@@ -64,6 +69,7 @@ public class ActionAreaController : MonoBehaviour
                 {
                     interactableObjectControllers.Remove(ioc);
                     interactableObjectControllers.Sort();
+                    ui.UpdateInteractionIcon();
                     return;
                 }
             }
@@ -91,6 +97,8 @@ public class ActionAreaController : MonoBehaviour
             interactableObjectControllers.Remove(obj);
             if (interactableObjectControllers.Count > 0)
                 interactableObjectControllers.Sort();
+
+            ui.UpdateInteractionIcon();
         }
     }
 }

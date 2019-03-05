@@ -35,7 +35,6 @@ public class EnemySightController : MonoBehaviour
 
         if (angle < fovAngle * 0.5f)
         {
-            print("player in angle");
             RaycastHit hit;
             var distance = Vector3.Distance(transform.position + transform.up, pc.transform.position + transform.up);
 

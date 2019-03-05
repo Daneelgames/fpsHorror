@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     public float speed = 2;
     public float sensitivity = 2f;
 
-    ActionAreaController actionAreaController;
+    public ActionAreaController actionAreaController;
     CharacterController characterController;
 
     [SerializeField]
@@ -40,11 +40,13 @@ public class PlayerController : MonoBehaviour
 
     GameObject lwho;
     GameObject rwho;
+    UiController ui;
 
     private void Awake()
     {
         gm = GameManager.instance;
         gm.SetPlayer(this);
+        ui = UiController.instance;
         characterController = GetComponent<CharacterController>();
 
         lwho = new GameObject();
@@ -104,7 +106,18 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Fire1") && weaponLeft)
         {
             if (!leftWeaponMelee)
-                weaponLeft.Shoot("PlayerProjectile");
+            {
+                if (weaponLeft.ammo > 0)
+                {
+                    weaponLeft.Shoot("PlayerProjectile");
+                }
+                else
+                {
+                    weaponLeft.Throw(15);
+                    weaponLeft = null;
+                }
+                ui.UpdateWeaponIcons();
+            }
             else
             {
                 StartCoroutine(MeleeAttack(leftMeleeCollider));
@@ -115,7 +128,18 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Fire2") && weaponRight)
         {
             if (!rightWeaponMelee)
-                weaponRight.Shoot("PlayerProjectile");
+            {
+                if (weaponRight.ammo > 0)
+                {
+                    weaponRight.Shoot("PlayerProjectile");
+                }
+                else
+                {
+                    weaponRight.Throw(15);
+                    weaponRight = null;
+                }
+                ui.UpdateWeaponIcons();
+            }
             else
             {
                 StartCoroutine(MeleeAttack(rightMeleeCollider));
@@ -139,6 +163,7 @@ public class PlayerController : MonoBehaviour
             {
                 weaponLeft.Throw(15);
                 weaponLeft = null;
+                ui.UpdateWeaponIcons();
             }
             if (actionAreaController.interactableObjectControllers.Count > 0)
             {
@@ -151,6 +176,7 @@ public class PlayerController : MonoBehaviour
             {
                 weaponRight.Throw(15);
                 weaponRight = null;
+                ui.UpdateWeaponIcons();
             }
             if (actionAreaController.interactableObjectControllers.Count > 0)
             {
@@ -202,5 +228,6 @@ public class PlayerController : MonoBehaviour
             weaponRight.transform.localEulerAngles = Vector3.zero;
             weaponRight.transform.localPosition = Vector3.zero;
         }
+        ui.UpdateWeaponIcons();
     }
 }
